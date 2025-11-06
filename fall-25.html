@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Device Registration</title>
+
+    <!-- (b) CSS: simple, readable layout + error styling -->
+    <style>
+      :root {
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial,
+          sans-serif;
+        line-height: 1.4;
+      }
+      body {
+        max-width: 720px;
+        margin: 48px auto;
+        padding: 0 16px;
+      }
+      form {
+        display: grid;
+        gap: 16px;
+      }
+      .field {
+        display: grid;
+        gap: 6px;
+      }
+      label {
+        font-weight: 600;
+      }
+      input,
+      button,
+      select,
+      textarea {
+        padding: 10px 12px;
+        border: 1px solid #c9c9cf;
+        border-radius: 8px;
+        font-size: 16px;
+      }
+      .hint {
+        font-size: 12px;
+        color: #6b6b76;
+      }
+      .error-text {
+        font-size: 13px;
+        color: #b00020;
+        min-height: 1.2em;
+      }
+      .invalid {
+        border-color: #b00020 !important;
+        background: #fff6f6;
+      }
+      .success-banner {
+        display: none;
+        padding: 12px;
+        border-radius: 8px;
+        background: #e8f5e9;
+        border: 1px solid #c8e6c9;
+      }
+      .success-banner.show {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- (a) HTML structure for the registration form -->
+    <h1>Device Registration</h1>
+    <p class="hint">
+      Please enter your device details. We’ll validate everything before
+      sending.
+    </p>
+
+    <div id="success" class="success-banner" role="status" aria-live="polite">
+      ✅ Device registered successfully (demo)!
+    </div>
+
+    <form id="regForm" novalidate>
+      <div class="field">
+        <label for="deviceName">Device Name</label>
+        <input
+          id="deviceName"
+          name="deviceName"
+          type="text"
+          placeholder="e.g., Alpha Sensor"
+          autocomplete="off"
+          required
+        />
+        <div id="deviceNameError" class="error-text" aria-live="polite"></div>
+      </div>
+
+      <div class="field">
+        <label for="serial">Serial Number</label>
+        <input
+          id="serial"
+          name="serial"
+          type="text"
+          placeholder="XXXX-YYYY"
+          inputmode="latin"
+          autocomplete="off"
+          maxlength="9"
+        />
+        <div class="hint">Format: <strong>XXXX-YYYY</strong> (A–Z or 0–9)</div>
+        <div id="serialError" class="error-text" aria-live="polite"></div>
+      </div>
+
+      <div class="field">
+        <label for="serialConfirm">Confirm Serial Number</label>
+        <input
+          id="serialConfirm"
+          name="serialConfirm"
+          type="text"
+          placeholder="XXXX-YYYY"
+          inputmode="latin"
+          autocomplete="off"
+          maxlength="9"
+        />
+        <div id="confirmError" class="error-text" aria-live="polite"></div>
+      </div>
+
+      <div class="field">
+        <label for="notes">Notes (optional)</label>
+        <textarea
+          id="notes"
+          name="notes"
+          rows="3"
+          placeholder="Anything else we should know?"
+        ></textarea>
+      </div>
+
+      <button type="submit">Register Device</button>
+    </form>
+
+    <!-- (c) JS: validation logic & function structure -->
+    <script>
+      const form = document.getElementById("regForm");
+      const deviceName = document.getElementById("deviceName");
+      const serial = document.getElementById("serial");
+      const serialConfirm = document.getElementById("serialConfirm");
+
+      const deviceNameErr = document.getElementById("deviceNameError");
+      const serialErr = document.getElementById("serialError");
+      const confirmErr = document.getElementById("confirmError");
+      const successBanner = document.getElementById("success");
+
+      // Regex for "XXXX-YYYY" where X/Y are alphanumeric, uppercase
+      const SERIAL_RE = /^[A-Z0-9]{4}-[A-Z0-9]{4}$/;
+
+      // Utility: set error UI for a field
+      function setError(inputEl, errorEl, message) {
+        if (message) {
+          inputEl.classList.add("invalid");
+          errorEl.textContent = message;
+        } else {
+          inputEl.classList.remove("invalid");
+          errorEl.textContent = "";
+        }
+      }
+
+      // Normalize serial (uppercasing)
+      function normalizeSerial(value) {
+        return (value || "").toUpperCase().trim();
+      }
+
+      // (c.i) On submit: prevent default and validate
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        successBanner.classList.remove("show");
+
+        // Clear old errors
+        setError(deviceName, deviceNameErr, "");
+        setError(serial, serialErr, "");
+        setError(serialConfirm, confirmErr, "");
+
+        // Pull values
+        const nameVal = deviceName.value.trim();
+        const serialVal = normalizeSerial(serial.value);
+        const confirmVal = normalizeSerial(serialConfirm.value);
+
+        // (c.ii) Device Name required
+        let valid = true;
+        if (!nameVal) {
+          setError(deviceName, deviceNameErr, "Device Name is required.");
+          valid = false;
+        }
+
+        // (c.iii) Serial format must be XXXX-YYYY
+        if (!SERIAL_RE.test(serialVal)) {
+          setError(
+            serial,
+            serialErr,
+            "Invalid Serial Number format. Must be XXXX-YYYY."
+          );
+          valid = false;
+        } else {
+          // reflect normalized casing back to the field for clarity
+          serial.value = serialVal;
+        }
+
+        // (c.iv) Match Serial confirmation
+        if (serialVal !== confirmVal) {
+          setError(serialConfirm, confirmErr, "Serial Numbers do not match.");
+          valid = false;
+        } else {
+          serialConfirm.value = confirmVal;
+        }
+
+        // Demo “success” pathway
+        if (valid) {
+          successBanner.classList.add("show");
+          form.reset();
+          deviceName.focus();
+        }
+      });
+
+      // QoL: live cleanup as the user edits
+      [deviceName, serial, serialConfirm].forEach((el) => {
+        el.addEventListener("input", () => {
+          setError(
+            el,
+            el === deviceName
+              ? deviceNameErr
+              : el === serial
+              ? serialErr
+              : confirmErr,
+            ""
+          );
+          if (el === serial || el === serialConfirm) {
+            el.value = normalizeSerial(el.value);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
