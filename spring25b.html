@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form Validation</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+
+      body {
+        background-color: #f5f5f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .container {
+        background: #fff;
+        padding: 20px 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 320px;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+
+      label {
+        font-weight: bold;
+        margin-top: 10px;
+      }
+
+      input {
+        margin-top: 5px;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      input:focus {
+        outline: none;
+        border-color: #007bff;
+      }
+
+      #error {
+        color: red;
+        font-size: 0.85em;
+        margin-bottom: 10px;
+        display: block;
+      }
+      .error {
+        border: 2px solid red;
+      }
+      #button {
+        margin-top: 10px;
+        padding: 8px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      #button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <form id="registerForm">
+        <label for="name">Name:</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          placeholder="Enter your name"
+        />
+        <small id="errorName"></small>
+
+        <label for="email">Email:</label>
+        <input
+          type="text"
+          id="email"
+          name="email"
+          placeholder="Enter your email"
+        />
+        <small id="errorEmail"></small>
+
+        <label for="password">Password:</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Enter your password"
+        />
+        <small id="errorPassword"></small>
+
+        <label for="confirmPassword">Confirm Password:</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          name="confirmPassword"
+          placeholder="Confirm your password"
+        />
+        <small id="errorConPassword"></small>
+        <input id="button" type="submit" />
+      </form>
+    </div>
+
+    <script>
+      document
+        .getElementById("registerForm")
+        .addEventListener("submit", (e) => {
+          e.preventDefault();
+          const nameVal = document.getElementById("name").value.trim();
+          const emailVal = document.getElementById("email").value.trim();
+          const passVal = document.getElementById("password").value.trim();
+          const conPassVal = document
+            .getElementById("confirmPassword")
+            .value.trim();
+
+          document
+            .querySelectorAll("input")
+            .forEach((i) => i.classList.remove("error"));
+          document
+            .querySelectorAll("small")
+            .forEach((i) => (i.textContent = ""));
+
+          const showError = (msg, id, error) => {
+            document.getElementById(id).classList.add("error");
+            document.getElementById(error).textContent = msg;
+          };
+          if (nameVal.length < 3) {
+            showError(
+              "Name must be at least 3 characters long",
+              "name",
+              "errorName"
+            );
+          }
+
+          if (!emailVal.includes("@")) {
+            showError(
+              "Please enter a valid email address",
+              "email",
+              "errorEmail"
+            );
+          }
+          if (passVal.length < 6) {
+            showError(
+              "Password must be at least 6 characters long",
+              "password",
+              "errorPassword"
+            );
+          }
+          if (passVal !== conPassVal || passVal.length < 6) {
+            showError(
+              "Confirm Password must match Password",
+              "confirmPassword",
+              "errorConPassword"
+            );
+            return;
+          }
+          alert("submit success");
+
+          document.getElementById("name").value = "";
+          document.getElementById("email").value = "";
+          document.getElementById("password").value = "";
+          document.getElementById("confirmPassword").value = "";
+        });
+    </script>
+  </body>
+</html>
