@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Labeled Layout (Grid)</title>
+    <style>
+      :root {
+        font-family: system-ui, Arial, sans-serif;
+      }
+      body {
+        background: #fafafa;
+        padding: 24px;
+      }
+
+      /* GRID: 12 columns, fixed left rail for a/J */
+      .wrap {
+        display: grid;
+        grid-template-columns: 60px 90px 90px 90px repeat(8, 1fr);
+        /* rows roughly matching the sketch heights */
+        grid-template-rows:
+          80px /* row 1: b c d */
+          44px /* row 2: e */
+          44px /* row 3: f */
+          44px /* row 4: g */
+          32px /* row 5: h */
+          32px /* row 6: i */
+          120px /* row 7: k l */
+          80px /* row 8: n under m */
+          60px; /* row 9: bottom tail of J + n */
+        gap: 8px;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+
+      /* Named areas for clarity */
+      .a {
+        grid-area: a;
+      }
+      .b {
+        grid-area: b;
+      }
+      .c {
+        grid-area: c;
+      }
+      .d {
+        grid-area: d;
+      }
+      .e {
+        grid-area: e;
+      }
+      .f {
+        grid-area: f;
+      }
+      .g {
+        grid-area: g;
+      }
+      .h {
+        grid-area: h;
+      }
+      .i {
+        grid-area: i;
+      }
+      .j {
+        grid-area: j;
+      }
+      .k {
+        grid-area: k;
+      }
+      .l {
+        grid-area: l;
+      }
+      .m {
+        grid-area: m;
+      }
+      .n {
+        grid-area: n;
+      }
+
+      /* Visuals */
+      .box {
+        border: 3px solid #111;
+        background: #fff;
+        display: grid;
+        place-items: center;
+        font-weight: 700;
+        text-transform: lowercase;
+      }
+
+      /* Assign the grid template areas row by row */
+      .wrap {
+        grid-template-areas:
+      /* r1 */
+          "a b c d . . . . . . . ."
+          /* r2 */ "a e e e e e e e e e e e"
+          /* r3 */ "a f f f f f f f f f f f"
+          /* r4 */ "a g g g g g g g g g g g"
+          /* r5 */ "a h h h h h h h h h h h"
+          /* r6 */ "a i i i i i i i i i i i"
+          /* r7 */ "j k k k k k l l l l l l"
+          /* r8 */ "j n n n n n m m m m m m"
+          /* r9 */ "j n n n n n n n n n n n";
+      }
+
+      /* Small screens: stack nicely */
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="box a">a</div>
+      <div class="box b">b</div>
+      <div class="box c">c</div>
+      <div class="box d">d</div>
+      <div class="box e">e</div>
+      <div class="box f">f</div>
+      <div class="box g">g</div>
+      <div class="box h">h</div>
+      <div class="box i">i</div>
+      <div class="box j">j</div>
+      <div class="box k">k</div>
+      <div class="box l">l</div>
+      <div class="box m">m</div>
+      <div class="box n">n</div>
+    </div>
+  </body>
+</html>
