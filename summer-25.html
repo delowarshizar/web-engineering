@@ -1,11 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Form validation</title>
-</head>
-<body>
-    
-</body>
+    <style>
+      .main-container {
+        max-width: 25vw;
+        height: 80vh;
+        margin: 10vh auto;
+        padding: 10px;
+        border: 1px solid black;
+        border-radius: 10px;
+        background-color: rgba(46, 190, 195, 0.123);
+      }
+      body input {
+        width: 100%;
+        margin: 10px 0px;
+        background-color: beige;
+        border-radius: 5px;
+        height: 30px;
+      }
+      label {
+        font-weight: bold;
+      }
+      .error {
+        border: 1px solid red;
+      }
+      #error {
+        font-size: 15px;
+        color: red;
+      }
+      #input {
+        background-color: green;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main-container">
+      <h1>Device Registration Form</h1>
+      <p>Please Provide Your Device Information</p>
+      <form id="reg-from">
+        <div>
+          <label for="device-name">Device Name</label>
+          <input
+            type="text"
+            name=""
+            id="device-name"
+            placeholder="write your device model"
+          />
+        </div>
+        <div>
+          <label for="device-no">Serial Number</label>
+          <input type="text" name="" id="device-no" placeholder="XXXX-YYYY" />
+        </div>
+        <div>
+          <label for="cdevice-no">Confirm Serial Number</label>
+          <input type="text" name="" id="cdevice-no" placeholder="XXXX-YYYY" />
+        </div>
+        <div id="error"></div>
+        <input id="input" type="submit" value="Register" />
+      </form>
+    </div>
+
+    <script>
+      document.getElementById("reg-from").addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        document
+          .querySelectorAll("input")
+          .forEach((i) => i.classList.remove("error"));
+        document.getElementById("error").textContent = "";
+
+        const showError = (msg, id) => {
+          document.getElementById(id).classList.add("error");
+          document.getElementById("error").textContent = msg;
+        };
+
+        const deviceVal = document.getElementById("device-name").value.trim();
+        const serialVal = document.getElementById("device-no").value.trim();
+        const confirmVal = document.getElementById("cdevice-no").value.trim();
+        if (deviceVal === "") {
+          showError("Device Name is required", "device-name");
+          return;
+        }
+        const pattern = /^[A-Za-z0-9]{4}-[A-Za-z0-9]{4}$/;
+        if (!pattern.test(serialVal)) {
+          showError("Invalid Serial Format", "device-no");
+          return;
+        }
+        if (serialVal !== confirmVal) {
+          showError("Not Match with Serial Number", "cdevice-no");
+          return;
+        }
+        alert("Form Submission Successfull");
+        document.getElementById("device-name").value = "";
+        document.getElementById("device-no").value = "";
+        document.getElementById("cdevice-no").value = "";
+      });
+    </script>
+  </body>
 </html>
