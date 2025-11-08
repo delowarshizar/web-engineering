@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Delegation Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        #taskList {
+            list-style: none;
+            padding: 0;
+            border: 2px solid #3498db;
+            border-radius: 5px;
+            max-width: 400px;
+            margin-bottom: 20px;
+        }
+
+        #taskList li {
+            padding: 10px 15px;
+            border-bottom: 1px solid #ecf0f1;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        #taskList li:last-child {
+            border-bottom: none;
+        }
+
+        #taskList li:hover {
+            background-color: #f0f8ff;
+        }
+
+        /* Optional completed style */
+        .completed {
+            text-decoration: line-through;
+            color: gray;
+        }
+
+        #status-message {
+            margin-top: 15px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        #addTaskBtn {
+            padding: 10px 15px;
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Task List (Event Delegation)</h1>
+    
+    <button id="addTaskBtn">Add New Task</button>
+
+    <ul id="taskList">
+        <li>Grocery Shopping</li>
+        <li>Finish Project Report</li>
+        <li>Call IT Support</li>
+    </ul>
+    
+    <p id="status-message">Click an item above to mark it as complete.</p>
+
+    <script>
+        const taskList = document.getElementById('taskList');
+        const statusMessage = document.getElementById('status-message');
+        const addTaskBtn = document.getElementById('addTaskBtn');
+        let taskCount = 4;
+
+        // --- Single Event Delegation ---
+        taskList.addEventListener('click', function (event) {
+            const clickedElement = event.target;
+
+            if (clickedElement && clickedElement.tagName === 'LI') {
+                const taskName = clickedElement.textContent;
+
+                // Toggle completed class
+                clickedElement.classList.toggle('completed');
+
+                // ✅ Corrected template literal
+                statusMessage.textContent = `Task "${taskName}" toggled as complete!`;
+
+                console.log(`Clicked on task: ${taskName}`);
+            }
+        });
+        
+        // --- Add dynamic tasks ---
+        addTaskBtn.addEventListener('click', function() {
+            const newItem = document.createElement('li');
+            newItem.textContent = `New Dynamic Task ${taskCount++}`;
+            taskList.appendChild(newItem);
+
+            // ✅ Corrected template literal
+            statusMessage.textContent = `Added: ${newItem.textContent}. Try clicking it!`;
+        });
+    </script>
+</body>
+</html>
