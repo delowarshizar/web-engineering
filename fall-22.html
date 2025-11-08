@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grid</title>
+    <style>
+      .main-container {
+        display: grid;
+        grid-template-columns: repeat(18, 30px);
+        grid-template-areas:
+          "a a b b c c d d d d d d d d d d d d"
+          "e e e f f f f f f f f f f f f f f f"
+          "e e e g g g g g g g g g g g g g g g"
+          "h h h i i i i i i i i i i i i i i i"
+          "j j j j j j k k k k k k l l l l l l"
+          "j j j j j j k k k k k k m m m m m m"
+          "j j j j j j n n n n n n n n n n n n";
+      }
+      .a {
+        grid-area: a;
+        height: 90px;
+        display: flex;
+        align-items: center;
+      }
+      .b {
+        grid-area: b;
+      }
+      .c {
+        grid-area: c;
+      }
+      .d {
+        grid-area: d;
+      }
+      .e {
+        grid-area: e;
+        padding-top: 5px;
+      }
+      .f {
+        grid-area: f;
+      }
+      .g {
+        grid-area: g;
+      }
+      .h {
+        grid-area: h;
+      }
+      .i {
+        grid-area: i;
+      }
+      .j {
+        grid-area: j;
+      }
+      .k {
+        grid-area: k;
+      }
+      .l {
+        grid-area: l;
+        padding-left: 30px;
+      }
+      .m {
+        grid-area: m;
+        padding-left: 10px;
+      }
+      .n {
+        grid-area: n;
+        padding-left: 80px;
+      }
+      .item {
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main-container">
+      <div class="item a">a</div>
+      <div class="item b">b</div>
+      <div class="item c">c</div>
+      <div class="item d">d</div>
+      <div class="item e">e</div>
+      <div class="item f">f</div>
+      <div class="item g">g</div>
+      <div class="item h">h</div>
+      <div class="item i">i</div>
+      <div class="item j">j</div>
+      <div class="item k">k</div>
+      <div class="item l">l</div>
+      <div class="item m">m</div>
+      <div class="item n">n</div>
+    </div>
+  </body>
+</html>
