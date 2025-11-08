@@ -77,8 +77,8 @@
         let taskCount = 4;
 
         // --- Single Event Delegation ---
-        taskList.addEventListener('click', function (event) {
-            const clickedElement = event.target;
+        taskList.addEventListener('click', function (e) {
+            const clickedElement = e.target;
 
             if (clickedElement && clickedElement.tagName === 'LI') {
                 const taskName = clickedElement.textContent;
