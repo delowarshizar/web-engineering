@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Single Elimination Validation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f9fa;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .match {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 10px;
+      margin: 10px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 400px;
+    }
+    label { font-weight: bold; }
+    select, button {
+      padding: 6px 10px;
+      border-radius: 4px;
+      border: 1px solid #aaa;
+      font-size: 14px;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 10px;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>🏆 Single Elimination Validator</h1>
+
+  <!-- Round 1 Matches -->
+  <div id="matches">
+    <div class="match">
+      <label>Round 1 - Match 1:</label>
+      <span>A vs B</span>
+      <select id="r1m1">
+        <option value="">Select Winner</option>
+        <option value="A">A</option>
+        <option value="B">B</option>
+      </select>
+    </div>
+
+    <div class="match">
+      <label>Round 1 - Match 2:</label>
+      <span>C vs D</span>
+      <select id="r1m2">
+        <option value="">Select Winner</option>
+        <option value="C">C</option>
+        <option value="D">D</option>
+      </select>
+    </div>
+
+    <!-- Round 2 -->
+    <div class="match">
+      <label>Round 2 - Final:</label>
+      <span>Winner1 vs Winner2</span>
+      <select id="r2m1">
+        <option value="">Select Winner</option>
+        <option value="A">A</option>
+        <option value="B">B</option>
+        <option value="C">C</option>
+        <option value="D">D</option>
+      </select>
+    </div>
+  </div>
+
+  <button onclick="validateTournament()">Validate Tournament</button>
+
+  <div id="result" class="result"></div>
+
+  <script>
+    function validateTournament() {
+      // Collect winners
+      const r1m1 = document.getElementById("r1m1").value;
+      const r1m2 = document.getElementById("r1m2").value;
+      const r2m1 = document.getElementById("r2m1").value;
+      const resultDiv = document.getElementById("result");
+
+      // Basic checks
+      if (!r1m1 || !r1m2 || !r2m1) {
+        resultDiv.textContent = "⚠️ Please select all winners first.";
+        resultDiv.style.color = "orange";
+        return;
+      }
+
+      // Track eliminations
+      const eliminated = new Set();
+      const matches = [
+        { round: 1, players: ["A", "B"], winner: r1m1 },
+        { round: 1, players: ["C", "D"], winner: r1m2 },
+        { round: 2, players: [r1m1, r1m2], winner: r2m1 },
+      ];
+
+      for (const match of matches) {
+        const [p1, p2] = match.players;
+        if (eliminated.has(p1) || eliminated.has(p2)) {
+          resultDiv.textContent = `❌ Invalid: eliminated player found in round ${match.round}`;
+          resultDiv.style.color = "red";
+          return;
+        }
+
+        if (!match.players.includes(match.winner)) {
+          resultDiv.textContent = `❌ Invalid: winner not in match (${match.players.join(" vs ")})`;
+          resultDiv.style.color = "red";
+          return;
+        }
+
+        // Mark loser as eliminated
+        const loser = p1 === match.winner ? p2 : p1;
+        eliminated.add(loser);
+      }
+
+      // Final validation
+      if (r2m1 && !eliminated.has(r2m1)) {
+        resultDiv.textContent = `✅ Tournament is valid! Champion: ${r2m1}`;
+        resultDiv.style.color = "green";
+      } else {
+        resultDiv.textContent = `❌ Invalid: check winners again.`;
+        resultDiv.style.color = "red";
+      }
+    }
+  </script>
+</body>
+</html>
