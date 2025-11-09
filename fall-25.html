@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fall-25 Solved</title>
+    <style>
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 150px;
+        border: 1px solid black;
+        margin: 5px;
+        padding: 5px;
+        border-radius: 5px;
+      }
+      #main-container {
+        margin: 5px;
+        padding: 5px;
+        border-radius: 5px;
+      }
+      button {
+        background-color: rgb(56, 151, 56);
+        color: rgba(255, 255, 255, 0.888);
+        margin: 5px;
+        padding: 5px;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: blue;
+      }
+      @media screen and (max-width: 600px) {
+        body {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <form id="main-container">
+      <div>
+        <input type="checkbox" id="web-checkbox" />
+        <label for="web-checkbox">Web Development 25500 tk</label>
+      </div>
+      <div>
+        <input type="checkbox" id="seo-checkbox" />
+        <label for="seo-checkbox">SEO Optimization 9250 tk</label>
+      </div>
+      <div>
+        <input type="checkbox" id="ecom-checkbox" />
+        <label for="ecom-checkbox">E-Commerce Integration 88750 tk</label>
+      </div>
+    </form>
+
+    <div>
+      <h1>Chosen Services</h1>
+      <ul id="chose-list"></ul>
+      <p id="cost">Total cost: 0.00 tk</p>
+      <button type="button" id="reset">Reset</button>
+    </div>
+
+    <script>
+      let totalCost = 0;
+      const choseList = document.getElementById("chose-list");
+      const costP = document.getElementById("cost");
+      const resetBtn = document.getElementById("reset");
+
+      const appendItem = (id, name) => {
+        const li = document.createElement("li");
+        li.textContent = name;
+        li.id = id + "-li";
+        choseList.appendChild(li);
+      };
+
+      const removeItem = (id) => {
+        const li = document.getElementById(id + "-li");
+        li && choseList.removeChild(li);
+      };
+
+      const updateResetButton = () => {
+        resetBtn.disabled = choseList.children.length === 0;
+      };
+
+      document
+        .getElementById("main-container")
+        .addEventListener("change", (e) => {
+          const clickVal = e.target;
+
+          if (clickVal.id === "web-checkbox") {
+            if (clickVal.checked) {
+              totalCost += 25500;
+              appendItem("web-checkbox", "Web Development");
+            } else {
+              totalCost -= 25500;
+              removeItem("web-checkbox");
+            }
+          }
+
+          if (clickVal.id === "seo-checkbox") {
+            if (clickVal.checked) {
+              totalCost += 9250;
+              appendItem("seo-checkbox", "SEO Optimization");
+            } else {
+              totalCost -= 9250;
+              removeItem("seo-checkbox");
+            }
+          }
+
+          if (clickVal.id === "ecom-checkbox") {
+            if (clickVal.checked) {
+              totalCost += 88750;
+              appendItem("ecom-checkbox", "E-Commerce Integration");
+            } else {
+              totalCost -= 88750;
+              removeItem("ecom-checkbox");
+            }
+          }
+          let displayCost = totalCost;
+          if (displayCost > 100000) {
+            displayCost += displayCost * 0.15;
+          }
+
+          costP.textContent = `Total cost: ${displayCost.toFixed(2)} tk`;
+
+          updateResetButton();
+        });
+      resetBtn.addEventListener("click", () => {
+        totalCost = 0;
+        costP.textContent = "Total cost: 0.00 tk";
+        choseList.innerHTML = "";
+        document.getElementById("web-checkbox").checked = false;
+        document.getElementById("seo-checkbox").checked = false;
+        document.getElementById("ecom-checkbox").checked = false;
+        updateResetButton();
+      });
+    </script>
+  </body>
+</html>
