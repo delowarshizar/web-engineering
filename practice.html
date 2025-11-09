@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>single event delegation</title>
+    <style>
+      ul {
+        padding: 5px;
+        list-style: none;
+        border: 1px solid black;
+        width: 300px;
+        border-radius: 5px;
+      }
+      button {
+        background-color: green;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      li {
+        height: 30px;
+        border-bottom: 1px solid;
+        cursor: pointer;
+      }
+      li:last-child {
+        border-bottom: none;
+      }
+      .complete {
+        text-decoration: line-through;
+        color: rgb(169, 163, 155);
+      }
+      #msg {
+        width: 300px;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Todo List</h1>
+    <p>Write your daily work</p>
+    <button id="submit-btn">Add to list</button>
+    <ul id="todo-container">
+      <li>study 2 hours</li>
+      <li>sleep 10 hours</li>
+    </ul>
+    <p id="msg">Click items to mark as complete</p>
+
+    <script>
+      document
+        .getElementById("todo-container")
+        .addEventListener("click", (e) => {
+          const clickLi = e.target;
+          if (clickLi.tagName === "LI") {
+            clickLi.classList.toggle("complete");
+            const msg = document.getElementById("msg");
+            msg.textContent = `${clickLi.textContent} mark as complete`;
+            msg.style.color = "white";
+            msg.style.backgroundColor = "green";
+          }
+        });
+
+      document.getElementById("submit-btn").addEventListener("click", (e) => {
+        const newChild = document.createElement("li");
+        newChild.textContent = "another added";
+        document.getElementById("todo-container").appendChild(newChild);
+      });
+    </script>
+  </body>
+</html>
